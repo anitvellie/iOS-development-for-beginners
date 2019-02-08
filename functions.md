@@ -59,7 +59,7 @@ println(sayHelloWorld())
 ```
 
 #### Functions Without Return Value
-Functions are not required to define a return type. Here's a version of the `sayHello` function, called `sauGoodbye`, which prints its own `String` value rather than returning it:
+Functions are not required to define a return type. Here's a version of the `sayHello` function, called `sayGoodbye`, which prints its own `String` value rather than returning it:
 
 ```swift
 func sayGoodbye(personName: String) {
@@ -74,4 +74,54 @@ Because it does not need to return a value, the function's definition does not i
 
 > Strictly speaking, the `sayGoodbye` function *does* still return a value, even though no return value is defined. Functions without a defined return type return a special value of type `Void`. This is simply an empty tuple, in effect a tuple with zero elements, which can be written as `()`.
 
+The return values of a function can be ignored when it is called:
+
+```swift
+func printAndCount(stringToPrint: String) -> Int {
+  println(stringToPrint)
+  return count(stringToPrint)
+}
+func printWithoutCounting(stringToPrint: String) {
+  printAndCount(stringToPrint)
+}
+
+printAndCount("hello, world")
+// prints "hello world" and returns a value of 12
+
+printWithoutCounting("hello, world")
+// prints "hello world" but does not return anything
+```
+
+> Return values can be ignored, but a function that says it will return a value must always do so. A function with a defined return type cannot allow control to fall out of the botton of the function without returning a value, and attempting to do so will result in a complile-time error.
+
+#### Functions with Multiple Return Values
+You can use a tuple type as the return type for a function to return multiple values as part of one compound return value.
+
+The example below defines a function called `minMax`, which finds the smallest and largest numbers in an array of `Int` values:
+
+```swift
+func minMax(array: [Int]) -> (min: Int, max: Int) {
+  var currentMin = array[0]
+  var currentMax = array[0]
+  for value in array[1..<array.count] {
+    if value < currentMin {
+      currentMin = value
+    } else if value > currentMax {
+      currentMax = value
+    }
+  }
+  return (currentMin, currentMax)
+}
+```
+
+In this function, the overall minimum and maximum values are returned as a tuple of two `Int` values. 
+Because the tuple's member values are named as part of the function's return type, they can be accessed with dot syntax to retrieve the minimum and maximum found values:
+
+```swift
+let bounds = minMax([8, -6, 2, 109, 3, 71])
+println("min is \(bounds.min) and max is \(bounds.max)")
+// prints "min is -6 and max is 109"
+```
+
+Note that the tuple's members do not need to be named at the point that the tuple is returned from the function, because their names are already specified as part of the function's return type.
 
