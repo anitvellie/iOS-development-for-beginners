@@ -125,3 +125,83 @@ println("min is \(bounds.min) and max is \(bounds.max)")
 
 Note that the tuple's members do not need to be named at the point that the tuple is returned from the function, because their names are already specified as part of the function's return type.
 
+#### Optional Tuple Return Types
+If the tuple type to be returned from a function has the potential to have "no value" for the entire tuple, you can use an *optional* tuple return type to reflect the fact that the entire tuple can be `nil`. You write an optional tuple return type be placing a question mark after the tuple type's closing paranthesis, such as `(Int, Int)?` or `(String, Int, Bool)?`.
+
+> An optional tuple type such as `(Int, Int)?` is different from a tuple that contains optional types such as `(Int,?, Int?)`. With an optional tuple type, the entire tuple is optional, not just each individual value within the tuple.
+
+### Function Parameter Names
+All of the above functions define *parameter names* for their parameters.
+
+```swift
+func someFunction(parameterName: Int) {
+  // function body goes here
+  // you can use parameterName to refer to the argument value for that parameter
+}
+```
+
+However, these parameter names are only used within the body of the function itself, and cannot be used when calling the function. These kinds of parameter names are known as *local parameter names*, because they are only available for use within the function's body.
+
+#### External Parameter Names
+Sometimes it's useful to name each parameter when you *call* a function, to indicate the purpose of each argument you pass to the function. 
+
+If you want users of your function to provide parameter names when they call your function, define an *externam parameter name* for each parameter, in addition to the local parameter name. You write an external parameter name before the local parameter name it supports, separated by a space:
+
+```swift
+func someFunction(externalParameterName localParameterName: Int) {
+  // function body goes here, and you use localParameterName 
+  // to refer to the argument value for that parameter
+}
+```
+
+> If you provide an external parameter name for a parameter, that external name must *always* be used when you call the function.
+
+As an example, consider the following function, which joins two strings by inserting a third "joiner" string between them:
+
+```swift
+func join(s1: String, s2: String, joiner: String) -> String {
+  return s1 + joiner + s2
+}
+```
+
+When you call this function, the purpose of the three strings that you pass to the function is unclear:
+
+```swift
+join("hello", "world", ", " )
+// returns "hello, world"
+```
+
+To make the purpose of these `String` values clearer, define external parameter names for each `join` function parameter:
+
+```swift
+func join(string s1: String, toString s2: String, withJoiner joiner: String) -> String {
+  return s1 + joiner + s2
+}
+```
+
+You can now use these external parameter names to call the function unambiguously:
+
+```swift
+join(string: "hello", toString: "world", withJoiner: ", ")
+// returns "hello, world"
+```
+
+The use of external parameter names enables this second version of the `join` function to be called in an expressive, sentence-like manner by users of the function, while still providing a function body that is readable and clear in intent.
+
+> Consider using external parameter names whenever the purpose of a function's arguments would be unclear to someone reading your code for the first time. You do not need to specify external parameter names of the purpose of each parameter is unambiguous when the function is called.
+
+#### Shorthand External Parameter Names
+If you want to provide an external parameter name for a function parameter, and the local parameter name is already an appropriate name to use, you do not need to write the same name twice for that parameter. Instead, write the name once, and prefix the name with a hash symbol (`#`). This tells Swift to use that name as both the local parameter name and the external parameter name.
+
+This example defines a function called `containsCharacter`, which defines external parameter names for both of its parameters by placing a hash symbol before their local parameter names:
+
+```swift
+func containsCharacter(#string: String, #characterToFind: Character) -> Bool {
+  for character in string {
+    if character == characterToFind { 
+      return true
+    }
+  }
+  return false
+}
+```
