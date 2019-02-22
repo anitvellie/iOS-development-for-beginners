@@ -1,3 +1,5 @@
+> Excerpt From: Apple Education. “Intro to App Development with Swift”. Apple Inc. - Education, 2017. Apple Books. https://itunes.apple.com/ru/book/intro-to-app-development-with-swift/id1118575552?l=en&mt=11
+
 # Type Safety and Type Inference
 Swift is a *type-safe* language. A type safe language encouranges you to be clear about the types of values your code can work with. If part of your code requires a `String`, you can't pass it an `Int` by mistake.
 
@@ -32,3 +34,23 @@ let anotherPi = 3 + 0.14159
 ```
 
 The literal value of `3` has no explicit type in and of itself, and so an appropriate output type of `Double` is inferred from the presence of a floating-point literal as part of the addition.
+
+# Type Inference
+Swift uses type inference extensively, allowing you to omit the type or part of the type of many variables and expressions in your code. For example, instead of writing `var x: Int = 0`, you can write `var x = 0`, omitting the type completely — the compiler correctly infers infers that `x` names a value of type `Int`.
+Similarly, you can omit part of a type when the full type can be inferred from context. For instance, if you write:
+```swift
+let dict: Dictionary = ["A": 1]
+```
+the compiler infers that `dict` has the type `Dictionary<String, Int>`.
+
+In both examples above, the type information is passed up from the leaves of the expression tree to its root. That is, the type of `x` in `var x: Int = 0` is inferred by first checking the type of `0` and then passing this type information up to the root (the variable `x`).
+
+In Swift, type information can also flow in the opposite direction — from the root down to the leaves. In the following example, for instance, the explicit type annotation (`: Float`) on the constant `eFloat` causes the numeric literal `2.71828` to have an inferred type of `Float` instead of `Double`.
+
+```swift
+let e = 2.71828 // the type of e is inferred to be Double
+let eFloat: Float = 2.71828 // the type of eFloat is Float
+```
+
+Type inference in Swift operates at the level of a single expression or statement. This means that all of the information needed to infer an omitted type or part of a type in an expression must be accessible from type-checking the expression or one of its subexpressions.
+
